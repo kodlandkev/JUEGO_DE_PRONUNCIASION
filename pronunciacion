@@ -1,0 +1,124 @@
+import speech_recognition as speech_recog
+import random
+import time
+
+niveles = {
+
+"facil": ["calendar", "friend", "mouse"],
+"intermedio": ["computer", "algorithm", "developer"],
+"dificil": ["neural network", "machine learning", "artificial intelligence"]
+}
+
+pronun = {
+    "calendar": ["ka·len·dar"],
+    "friend": ["frend"],
+    "mouse": ["mows"],
+    "computer": ["kuhm·pyoo·tr"], 
+    "algorithm": ["al·gr·i·thm"],
+    "developer": ["duh·veh·luh·pr"],
+    "neural network": ["nur·uhl net·wrk"],
+    "machine learning": ["muh·sheen lur·nuhng"],
+    "artificial intelligence": ["aar·tuh·fi·shuhl uhn·teh·luh·jns"]
+}
+
+niveles_fra = {
+
+"facil": ["agenda", "ami", "souris"],
+"intermedio": ["ordinateur", "algorithme", "développeur"],
+"dificil": ["réseau neuronal", "apprentissage automatique", "intelligence artificielle"]
+}
+
+pronun_fra = {
+    "agenda": ["a·hen·da"], 
+    "ami": ["a·mi"], 
+    "souris": ["subi"],
+    "ordinateur": ["ordinator"], 
+    "algorithme": ["algoritm"], 
+    "développeur": ["devloper"],
+    "réseau neuronal": ["rezo neronal"],
+    "apprentissage automatique": ["apprentisag automatic"],
+    "intelligence artificielle": ["antelillens artificiela"]
+}
+
+error = 0
+def speech():
+    global error
+    try:
+        mic= speech_recog.Microphone()
+        recog= speech_recog.Recognizer()
+        with mic as audio_file:
+            recog.adjust_for_ambient_noise(audio_file)
+            audio= recog.listen(audio_file)
+            return recog.recognize_google(audio, language="en-EN")
+    except:
+        print("No se a identificado la voz")
+        error = 1
+
+def speech_fra():
+    global error
+    try:
+        mic= speech_recog.Microphone()
+        recog= speech_recog.Recognizer()
+        with mic as audio_file:
+            recog.adjust_for_ambient_noise(audio_file)
+            audio= recog.listen(audio_file)
+            return recog.recognize_google(audio, language="fr-FR")
+    except:
+        print("No se a identificado la voz")
+        error = 1
+
+def play_game(level):
+    global error
+    if idioma == "frances":
+        palabras_nivel = niveles_fra[level]
+        palabra_objetivo = random.choice(palabras_nivel)
+    if idioma == "ingles":
+        palabras_nivel = niveles[level]
+        palabra_objetivo = random.choice(palabras_nivel)
+    puntuacion = 0
+    time.sleep(3)
+    for ronda in range(num_rondas):
+        time.sleep(3)
+        print(f"Ronda {ronda+1}: Pronuncia la palabra {palabra_objetivo}")
+        if idioma == "frances":
+            palabra_pronunciada = speech_fra()
+        elif idioma == "ingles":
+            palabra_pronunciada = speech()
+        if idioma == "frances":
+            pronunciacion_correcta = pronun_fra.get(palabra_objetivo)
+        if idioma == "ingles":
+            pronunciacion_correcta = pronun.get(palabra_objetivo)
+        if error == 0:
+            if palabra_pronunciada == palabra_objetivo:
+                print("¡Correcto!")
+                puntuacion += 1
+            else:
+                print("Incorrecto. se pronuncia:", pronunciacion_correcta)
+        palabra_objetivo = random.choice(palabras_nivel)
+        error = 0
+        
+
+    print(f"Juego terminado. Tu puntuación es: {puntuacion}/{num_rondas}")
+
+idioma = input("Decide un idioma frances o ingles:")
+if idioma == "frances" or idioma == "ingles":
+    xd = ()
+else:
+    print("Escribe exactamente la palabra como se menciona, re activa la terminal")
+    error = 2
+if error == 0:
+    nivel = input("Selecciona un nivel (facil, intermedio, dificil): ")
+if nivel == "facil" or nivel == "intermedio" or nivel == "dificil":
+    xd = ()
+else:
+    print("Escribe perfectamente la dificultad, tendras que reactivar la termina")
+    error = 2
+if error == 0:
+    num_rondas = int(input("Escribe el numero de rondas:"))
+if num_rondas > 0:
+    xd = ()
+else:
+    print("Escribe un numero mayor, re activa la terminal")
+    error = 2
+if error == 0:
+    play_game(nivel)
